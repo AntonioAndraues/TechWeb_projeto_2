@@ -30,7 +30,7 @@ pageEncoding="UTF-8"%>
       <div class="card card-register mx-auto mt-5">
         <div class="card-header">Registre-se</div>
         <div class="card-body">
-          <form action="cria" method='post'>
+          <form action="usuario" method='post'>
             <div class="form-group">
               <div class="form-row">
                 <div class="col-md-6">

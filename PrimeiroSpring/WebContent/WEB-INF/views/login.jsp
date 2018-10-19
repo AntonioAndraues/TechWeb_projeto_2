@@ -29,6 +29,24 @@ pageEncoding="UTF-8"%>
 </head>
 
 <body class="bg-dark">
+<!-- function para post redirect -->
+<script>
+function redirectPost(url, data) {
+    var form = document.createElement('form');
+    document.body.appendChild(form);
+    form.method = 'get';
+    form.action = url;
+    for (var name in data) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = data[name];
+        form.appendChild(input);
+    }
+    form.submit();
+}
+</script>
+
 <!-- FACEBOOK LOGIN API CONNECT  -->
 
 
@@ -94,7 +112,8 @@ window.fbAsyncInit = function() {
  		senha=response.name.replace(" ", "_");
  		primeironome=response.name.replace(/ .*/,'');
  		sobrenome=response.name.replace(primeironome,'');
- 		window.location.assign("http://localhost:8080/PrimeiroSpring/facebook?email="+email +"&senha=" + senha+ "&primeironome=" + primeironome + "&ultimonome=" +sobrenome);
+ 		redirectPost('http://localhost:8080/PrimeiroSpring/facebook', { email: email, senha: senha, primeironome: primeironome, ultimonome: sobrenome });
+ 		/* window.location.assign("http://localhost:8080/PrimeiroSpring/facebook?email="+email +"&senha=" + senha+ "&primeironome=" + primeironome + "&ultimonome=" +sobrenome); */
  
  
  });	
@@ -112,7 +131,7 @@ window.fbAsyncInit = function() {
 		<div class="card card-login mx-auto mt-5">
 			<div class="card-header">Login</div>
 			<div class="card-body">
-				<form action="usuario" method="get">
+				<form action="login" method="get">
 					<div class="form-group">
 						<div class="form-label-group">
 							<input type="email" name="email" id="inputEmail"
@@ -156,7 +175,7 @@ window.fbAsyncInit = function() {
 
 	<!-- Core plugin JavaScript-->
 	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-</div>
+
 
 </body>
 

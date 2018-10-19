@@ -2,6 +2,10 @@ package mvc.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,22 +37,26 @@ public class UsuarioController {
 		try {
 			DAO dao = new DAO();
 			usuario usuario = new usuario();
-			usuario.setEmail(request.getParameter("email")); 
-			usuario.setSenha(request.getParameter("senha")); 
+			String email = null;
+	      	String senha = null;
+	    	Cookie[] cookies = request.getCookies();
+	       	if(cookies !=null){
+	       	for(Cookie cookie : cookies){
+	       		if(cookie.getName().equals("email")) email = cookie.getValue();
+	       		if(cookie.getName().equals("senha")) senha = cookie.getValue();
+	       		
+	       	}
+	       	}
+			usuario.setEmail(email); 
+			usuario.setSenha(senha);
 			usuario = dao.loga(usuario);
-			PrintWriter out = response.getWriter();
+			
 			
 			if (usuario.getPrimeiroNome()==null) {
-				System.out.println("TA AQUIII");
+		
 				return "usuario_invalido";
 				
 			}
-			else {
-//				response.sendRedirect("index.jsp?email="+usuario.getEmail()+"&senha="+usuario.getSenha());
-				
-				
-			}
-			
 
 			dao.close();
 			
@@ -88,25 +96,32 @@ public class UsuarioController {
 		return null;
 		
 	}
-	@RequestMapping(value = "/facebook")
+	@RequestMapping(value = "/facebook", method= RequestMethod.GET)
 	public String facebook(HttpServletRequest request,
 			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 		try {
+			System.out.println("POST");
 			DAO dao = new DAO();
 			usuario usuario = new usuario();
 			usuario.setPrimeiroNome(request.getParameter("primeironome")); 
 			usuario.setUltimoNome(request.getParameter("ultimonome"));
 			usuario.setEmail(request.getParameter("email")); 
-			usuario.setSenha(request.getParameter("senha")); 
+			usuario.setSenha(request.getParameter("senha"));
+			System.out.println(request.getParameter("email"));
+			redirectAttributes.addAttribute("email", request.getParameter("email"));
+			redirectAttributes.addAttribute("senha", request.getParameter("senha"));
 			if(dao.verifica_existe(usuario)==0) {
 				dao.adiciona(usuario);
 				dao.close();
 				
-				return "index";
+				
+				return "redirect:/session";
 
 			}else {
+				
 				if (dao.loga(usuario).getIdPessoa()!=null) {
-					return "index";
+					System.out.println("TESTE SESION LOG");
+					return "redirect:/session";
 					
 				}else {
 					return "email_em_uso";
@@ -192,7 +207,33 @@ public class UsuarioController {
 			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 		return "forgot-password";
 	}
+
+@RequestMapping(value = "/login", method= RequestMethod.GET)
+public String login(HttpServletRequest request,
+		 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
+	try {
+		DAO dao = new DAO();
+		usuario usuario = new usuario();
+		System.out.println("teste");
+		usuario.setEmail(request.getParameter("email")); 
+		usuario.setSenha(request.getParameter("senha"));
+		usuario = dao.loga(usuario);
+		redirectAttributes.addAttribute("email", request.getParameter("email"));
+		redirectAttributes.addAttribute("senha", request.getParameter("senha"));
+		
+		if (usuario.getPrimeiroNome()==null) {
 	
+			return "usuario_invalido";
+			
+		}
+
+		dao.close();
+		
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return "redirect:/session";
 	
 }
-
+}

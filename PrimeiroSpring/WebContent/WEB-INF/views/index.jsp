@@ -35,7 +35,7 @@
 
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      <a class="navbar-brand mr-1" href="?email=<%=request.getParameter("email")+"&senha="+request.getParameter("senha")%>">Board</a>
+      <a class="navbar-brand mr-1" href="/%>">Board</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -58,14 +58,27 @@
         
        
       </form>
-       <%
+       <%String email = null;
+      	String senha = null;
+    	Cookie[] cookies = request.getCookies();
+       	if(cookies !=null){
+       	for(Cookie cookie : cookies){
+       		if(cookie.getName().equals("email")) email = cookie.getValue();
+       		if(cookie.getName().equals("senha")) senha = cookie.getValue();
+       		
+       	}
+       	}
        	DAO dao = new DAO(); 
-       		  	usuario usuario = new usuario();
-       	usuario.setEmail(request.getParameter("email")); 
-       	usuario.setSenha(request.getParameter("senha"));
+		usuario usuario = new usuario();
+	
+       	usuario.setEmail(email); 
+       	usuario.setSenha(senha);
+
        	usuario = dao.loga(usuario);
        	List<usuario> lista_usuario = dao.getLista();
+       	if(email == null) response.sendRedirect("/PrimeiroSpring/");
        %>
+       
 
       <!-- Navbar -->
       <ul class="navbar-nav ml-auto ml-md-0">
@@ -101,7 +114,7 @@
             <a class="dropdown-item" href="#">Settings</a>
             <a class="dropdown-item" href="#">Activity Log</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="login.jsp">Logout</a>
+            <a class="dropdown-item" href="/PrimeiroSpring/">Logout</a>
           </div>
         </li>
       </ul>
@@ -113,7 +126,7 @@
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav">
         <li class="nav-item active">
-          <a class="nav-link" href="?email=<%=request.getParameter("email")+"&senha="+request.getParameter("senha")%>">
+          <a class="nav-link" href="/PrimeiroSpring/usuario">
             <i class="far fa-calendar-alt"></i>
             <span>Dashboard</span>
           </a>
@@ -191,7 +204,7 @@
             				<h2 onclick="close_onNota()" role="button" style="cursor:pointer;" >Nota</h2>
             				</div>
             				<div class="modal-body">
-            					<form action="notas" method="get" id="formservlet">
+            					<form action="notas" method="post" id="formservlet">
             						<div class="form-group">
             							<div class="form-label-group">
             								<input type="text" name="tag" id="inputtag"  placeholder="Insira a tag" class="form-control" placeholder="Tag da sua task" required="required" autofocus="autofocus">
@@ -205,8 +218,8 @@
             					 			<p style="position: absolute; cursor:pointer; margin-left: 40%; margin-right:40%;width:100%;margin-top: 5px" onclick="riseColor()">Clique aqui para mudar a cor</p>
             					 			<input type="color" name="cor" style="cursor:pointer;" onchange="MudaCor(this.value)"  id="inputCor" class="form-control" placeholder="Cor" required="required" onerror="Cor invalida"  >
             					 	</div></div>
-            <input type="hidden" name="email" value="<%=request.getParameter("email")%>"/>	
-            <input type="hidden" name="senha" value="<%=request.getParameter("senha")%>"/>
+            <input type="hidden" name="email" value="<%=email%>"/>	
+            <input type="hidden" name="senha" value="<%=senha%>"/>
             <input type="hidden" name="group" value="<%=request.getParameter("group")%>"/>
              <input type="hidden" name="_method" value="put"/>
             <input id="inputId" type="hidden" name="id_nota" value=""/>			 	 	
@@ -310,8 +323,8 @@
 								width="20" height="20" style="float:right; margin-right:5px;"></form>
 						</div>
 						<form action="notas" method="get" id="myDelete-<%=Integer.toString(i)%>"  >
-							<input type="hidden" name="email" value="<%=request.getParameter("email")%>"/>	
-           					<input type="hidden" name="senha" value="<%=request.getParameter("senha")%>"/>
+							<input type="hidden" name="email" value="<%=email%>"/>	
+           					<input type="hidden" name="senha" value="<%=senha%>"/>
            					<input type="hidden" name="id" value="<%=nota.get(3)%>"/>
            					<input type="hidden" name="_method" value="delete"/>
            					<input type="image" src="trash.png" alt="Submit" width="20" height="20" style="float:right; margin-right:5px;" data-submitname class="BtnDelete" data-id_pessoa_nota = "<%=nota.get(5)%>"  data-id_pessoa = "<%=usuario_id%>" >
@@ -541,7 +554,7 @@ function search_enter(urltoadd){
 
 function group_redirect(group){
 
-	window.location = 'http://localhost:8080/PrimeiroSpring/usuario?email=<%=request.getParameter("email")%>&senha=<%=request.getParameter("senha")%>&group='+group;
+	window.location = 'http://localhost:8080/PrimeiroSpring/usuario?group='+group;
 	
 	
 }
@@ -574,7 +587,7 @@ function fillInput(title) {
 	search_text.value=(title);
 }
 function tagopen(tag) {
-	window.location = 'http://localhost:8080/PrimeiroSpring/usuario?email=<%=request.getParameter("email")%>&senha=<%=request.getParameter("senha")%>&tag='+tag;
+	window.location = 'http://localhost:8080/PrimeiroSpring/usuario?tag='+tag;
 		
 }
 
@@ -650,7 +663,7 @@ function filterFunction() {
 	    	a.appendChild(linkText);
 	    	lista_str2.push(toadd);
 	    	a.title = notetxt[i];
-	    	a.href = 'http://localhost:8080/PrimeiroSpring/usuario?email=<%=request.getParameter("email")%>&senha=<%=request.getParameter("senha")%>&group=<%=request.getParameter("group")%>&search='+notetxt[i];
+	    	a.href = 'http://localhost:8080/PrimeiroSpring/usuario?group=<%=request.getParameter("group")%>&search='+notetxt[i];
 	    	
 	    	a.setAttribute("onclick", "fillInput(this.title)");
 	    	nodes.push(a);
