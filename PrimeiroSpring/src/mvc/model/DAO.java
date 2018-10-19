@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mvc.model.usuario;
+
 
 
 public class DAO {
@@ -328,5 +330,27 @@ public void edita_nota(usuario usuario, String texto, String tag,String cor, Str
 	}
 	
 }
+public usuario recupera_senha(usuario usuario) {
+	try {
+		PreparedStatement stmt = connection
+				.prepareStatement("SELECT * FROM usuario WHERE email=?");
+		stmt.setString(1,usuario.getEmail());
+		stmt.execute();
+		ResultSet rs = stmt.executeQuery();
+		while (rs.next()) {	
+			usuario.setPrimeiroNome(rs.getString("primeiro_nome"));
+			usuario.setUltimoNome(rs.getString("ultimo_nome"));
+			usuario.setSenha(rs.getString("senha"));
+		}
+//		
+		stmt.close();
+		rs.close();
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return usuario;
+			}
 }
 

@@ -16,8 +16,14 @@ import mvc.model.DAO;
 
 @Controller
 public class TarefasController {
+	@RequestMapping(value = "/notas", method = RequestMethod.GET)
+	public void getnotas(HttpServletRequest request,
+			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
+		System.out.println("TESTANDO");
+			
+	 }
 	@RequestMapping(value = "/notas", method = RequestMethod.PUT)
-	 public String getnotas(HttpServletRequest request,
+	 public String mudanotas(HttpServletRequest request,
 			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 		try {
 			DAO dao = new DAO();

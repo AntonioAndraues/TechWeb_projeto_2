@@ -191,7 +191,7 @@
             				<h2 onclick="close_onNota()" role="button" style="cursor:pointer;" >Nota</h2>
             				</div>
             				<div class="modal-body">
-            					<form action="notas" method="post" id="formservlet">
+            					<form action="notas" method="get" id="formservlet">
             						<div class="form-group">
             							<div class="form-label-group">
             								<input type="text" name="tag" id="inputtag"  placeholder="Insira a tag" class="form-control" placeholder="Tag da sua task" required="required" autofocus="autofocus">
@@ -208,6 +208,7 @@
             <input type="hidden" name="email" value="<%=request.getParameter("email")%>"/>	
             <input type="hidden" name="senha" value="<%=request.getParameter("senha")%>"/>
             <input type="hidden" name="group" value="<%=request.getParameter("group")%>"/>
+             <input type="hidden" name="_method" value="put"/>
             <input id="inputId" type="hidden" name="id_nota" value=""/>			 	 	
             
             <input id="submit_name" type="submit" value='Crie a Nota' class="btn btn-primary btn-block" href=""></input> </form>
@@ -304,14 +305,15 @@
 												<span class="float-left"><%=nota.get(1) %></span>							
 						<span class="align-content-lg-center"><%=nota.get(2)%></span>
 						<div>
-							<form action="notas" method="put"><input id="myBtn-<%=Integer.toString(i)%>" type="image" src="edit-regular.png" 
+							<form id="editaform" action="notas" method="get"><input type="hidden" name="_method" value="put"/><input id="myBtn-<%=Integer.toString(i)%>" type="image" src="edit-regular.png" 
 								data-id="<%=nota.get(3)%>" data-cor="<%=nota.get(0)%>" data-tag="<%=nota.get(1)%>"  data-id_pessoa_nota = "<%=nota.get(5)%>"  data-id_pessoa = "<%=usuario_id%>"  data-text="<%=nota.get(2)%>" data-id="<%=nota.get(3)%>" data-submitname class="BtnEditar"
 								width="20" height="20" style="float:right; margin-right:5px;"></form>
 						</div>
-						<form action="notas" method="DELETE" id="myDelete-<%=Integer.toString(i)%>"  >
+						<form action="notas" method="get" id="myDelete-<%=Integer.toString(i)%>"  >
 							<input type="hidden" name="email" value="<%=request.getParameter("email")%>"/>	
            					<input type="hidden" name="senha" value="<%=request.getParameter("senha")%>"/>
            					<input type="hidden" name="id" value="<%=nota.get(3)%>"/>
+           					<input type="hidden" name="_method" value="delete"/>
            					<input type="image" src="trash.png" alt="Submit" width="20" height="20" style="float:right; margin-right:5px;" data-submitname class="BtnDelete" data-id_pessoa_nota = "<%=nota.get(5)%>"  data-id_pessoa = "<%=usuario_id%>" >
    	
 						</form>

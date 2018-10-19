@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mvc.model.usuario;
+import util.EnviarEmail;
 import mvc.model.DAO;
 
 @Controller
@@ -124,6 +125,72 @@ public class UsuarioController {
 		}
 		return null;
 		
+	}
+	@RequestMapping(value = "/forgotpassword",method = RequestMethod.POST)
+	public String retrivepassword(HttpServletRequest request,
+			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
+		try {
+			DAO dao = new DAO();
+			usuario usuario = new usuario();
+			usuario.setEmail(request.getParameter("email")); 
+			dao.recupera_senha(usuario);
+			
+			if (usuario.getPrimeiroNome()!=null) {
+				if (request.getMethod().equals("POST")) {
+				    EnviarEmail enviar = new EnviarEmail();
+				    enviar.setdestino(usuario.getEmail());
+				    enviar.setAssunto("TASKMANAGER - Recuperaçao da senha!");
+				
+				    StringBuffer texto = new StringBuffer(); 
+				    texto.append("<h1 align='center'>TechManager</h1>");
+				    texto.append("Ola : "+"<h2>"+usuario.getPrimeiroNome()+" "+usuario.getUltimoNome()+"</h2>");
+				    texto.append("<br/>");
+				    texto.append("Sua Senha : ");
+				    texto.append("<br/>");
+				    texto.append("<h2 align='center'>"+ usuario.getSenha()+"</h2>");
+				    
+				    
+				    enviar.setMsg(texto.toString());
+				    
+				    boolean enviou = enviar.enviarGmail();
+				    if (enviou) {
+				            
+				            
+				            System.out.println("SUCESSO");
+				            return "login";
+				           
+				        } else {
+				        	System.out.println("Não deu certo");
+				        	return "forgotpassword404";
+				            
+				        }
+				  
+				}
+				
+				
+			}else {
+	        	System.out.println("Não deu certo");
+	        	return "forgotpassword404";
+			
+			
+			}}
+		
+				
+				
+				
+
+		
+			 catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "login";
+		
+	}
+	@RequestMapping(value = "/forgotpassword",method = RequestMethod.GET)
+	public String forgotpassword(HttpServletRequest request,
+			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
+		return "forgot-password";
 	}
 	
 	
