@@ -40,8 +40,9 @@ public class UsuarioController {
 			String email = null;
 	      	String senha = null;
 	    	Cookie[] cookies = request.getCookies();
-	       	if(cookies !=null){
+	       	if(cookies !=null ){
 	       	for(Cookie cookie : cookies){
+	       		
 	       		if(cookie.getName().equals("email")) email = cookie.getValue();
 	       		if(cookie.getName().equals("senha")) senha = cookie.getValue();
 	       		
@@ -50,7 +51,7 @@ public class UsuarioController {
 			usuario.setEmail(email); 
 			usuario.setSenha(senha);
 			usuario = dao.loga(usuario);
-			
+			System.out.println(email);
 			
 			if (usuario.getPrimeiroNome()==null) {
 		
