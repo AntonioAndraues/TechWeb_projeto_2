@@ -315,7 +315,10 @@ public void edita_nota(usuario usuario, String texto, String tag,String cor, Str
 	try {
 		PreparedStatement stmt = connection
 				.prepareStatement("UPDATE nota SET id_pessoa = ? , cor = ?, tag = ? ,texto = ? WHERE id_nota=?");
-	
+		System.out.println(cor);
+		System.out.println(tag);
+		System.out.println(texto);
+		System.out.println(id);
 		stmt.setInt(1,usuario.getIdPessoa());
 		stmt.setString(2,cor);
 		stmt.setString(3,tag);

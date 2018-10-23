@@ -204,7 +204,7 @@
             				<h2 onclick="close_onNota()" role="button" style="cursor:pointer;" >Nota</h2>
             				</div>
             				<div class="modal-body">
-            					<form action="notas" method="post" id="formservlet">
+            					<div id="formservlet">
             						<div class="form-group">
             							<div class="form-label-group">
             								<input type="text" name="tag" id="inputtag"  placeholder="Insira a tag" class="form-control" placeholder="Tag da sua task" required="required" autofocus="autofocus">
@@ -224,7 +224,7 @@
              <input type="hidden" name="_method" value="put"/>
             <input id="inputId" type="hidden" name="id_nota" value=""/>			 	 	
             
-            <input id="submit_name" type="submit" value='Crie a Nota' class="btn btn-primary btn-block" href=""></input> </form>
+            <input id="submit_name" type="submit" value='Crie a Nota' class="btn btn-primary btn-block" href=""></input> </div>
 			</div></div></div>
 			
 			
@@ -243,7 +243,7 @@
 					lista = dao.checktasks_all();
 				}
 				String search_str = request.getParameter("search");
-				System.out.println(search_str);
+			/* 	System.out.println(search_str); */
 				//System.out.println(Arrays.asList(lista).contains(search_str));
 				//System.out.println(search_str);	
 			
@@ -280,7 +280,7 @@
 			}else{
 				
 				if(request.getParameter("group")!=null  && !request.getParameter("group").equals("null")){
-					System.out.println("eitcha");
+					/* System.out.println("eitcha"); */
 					if(request.getParameter("search")==null){
 						lista = dao.checktasks_all();
 					}
@@ -318,19 +318,16 @@
 												<span class="float-left"><%=nota.get(1) %></span>							
 						<span class="align-content-lg-center"><%=nota.get(2)%></span>
 						<div>
-							<form id="editaform" action="notas" method="get"><input type="hidden" name="_method" value="put"/><input id="myBtn-<%=Integer.toString(i)%>" type="image" src="edit-regular.png" 
+							<div id="editaform" ><input type="hidden" name="_method" value="put"/><input id="myBtn-<%=Integer.toString(i)%>" type="image" src="edit-regular.png" 
 								data-id="<%=nota.get(3)%>" data-cor="<%=nota.get(0)%>" data-tag="<%=nota.get(1)%>"  data-id_pessoa_nota = "<%=nota.get(5)%>"  data-id_pessoa = "<%=usuario_id%>"  data-text="<%=nota.get(2)%>" data-id="<%=nota.get(3)%>" data-submitname class="BtnEditar"
-								width="20" height="20" style="float:right; margin-right:5px;"></form>
+								width="20" height="20" style="float:right; margin-right:5px;"></div>
 						</div>
-						<form action="notas" method="get" id="myDelete-<%=Integer.toString(i)%>"  >
+						<div>
 							<input type="hidden" name="email" value="<%=email%>"/>	
            					<input type="hidden" name="senha" value="<%=senha%>"/>
            					<input type="hidden" name="id" value="<%=nota.get(3)%>"/>
-           					<input type="hidden" name="_method" value="delete"/>
-           					<input type="image" src="trash.png" alt="Submit" width="20" height="20" style="float:right; margin-right:5px;" data-submitname class="BtnDelete" data-id_pessoa_nota = "<%=nota.get(5)%>"  data-id_pessoa = "<%=usuario_id%>" >
-   	
-						</form>
-							
+           					<input type="image" src="trash.png"  width="20" height="25" style="float:right; margin-right:1px;" data-submitname class="BtnDelete" href="/usuario" data-id_nota="<%=nota.get(3)%>"  data-id_pessoa_nota = "<%=nota.get(5)%>"  data-id_pessoa = "<%=usuario_id%>" >
+   						</div>
 							
 						
 
@@ -376,7 +373,7 @@
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-body">Select "Logout" bcccccelow if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
             <a class="btn btn-primary" href="login.jsp">Logout</a>
@@ -416,6 +413,7 @@
 // Get the modal
 // history.replaceState({}, null, "/index.jsp");
 var modal = document.getElementById('myModal');
+var edita;
 
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
@@ -461,7 +459,7 @@ if(id_pessoa_nota !== id_pessoa){
 		inputCor.value = e.target.dataset.cor;
 		inputTag.value = e.target.dataset.tag;
 		inputText.value = e.target.dataset.text;
-		 inputId.value = e.target.dataset.id;
+		inputId.value = e.target.dataset.id;
 		
 		submit_name.value = "Editar a nota"
 		submit_name.style.backgroundColor =  e.target.dataset.cor;
@@ -470,15 +468,20 @@ if(id_pessoa_nota !== id_pessoa){
 		
 		formservlet.action = "notas";
 		modal.style.display = "block";
+		
+		edita = 1;
+		
+		
+			
+		
+		}
 	}
-	
 
-	
-}
+
 
 
 for (var k = 0; k < btn_del_Arr.length; k++) {
-	
+
 	var btnDelete = btn_del_Arr[k];
 	
 		id_pessoa_nota =btnDelete.dataset.id_pessoa_nota;
@@ -487,6 +490,30 @@ for (var k = 0; k < btn_del_Arr.length; k++) {
 		if(id_pessoa_nota !== id_pessoa){
 			
 			btnDelete.style.display = "none";
+		}
+
+		
+		btnDelete.onclick = function(e) {
+		
+			
+			
+			
+			let email = "<%=email%>"
+			let senha = "<%=senha%>"
+			let id = e.target.dataset.id_nota
+
+			data = {
+				'email': email,
+				'senha': senha,
+				'id' : id
+			}
+			
+			fetch('/PrimeiroSpring/notas', {
+				method: 'DELETE',
+				body: JSON.stringify(data)
+			})
+			
+			window.location.replace("http://localhost:8080/PrimeiroSpring/usuario");
 		}
 		
 
@@ -511,6 +538,8 @@ btn.onclick = function(e) {
 	submit_name.style.backgroundColor =  "#2494d7"
 	notadiv.style.backgroundColor = "#2494d7"
 	inputCor.value = "#2494d7";
+	edita=0;
+	modal.style.display = "block";
 	
 	
 }
@@ -523,6 +552,42 @@ function close_onNota(){
 	modal.style.display = "none";
 }
 
+
+
+submit_name.onclick = function(e) {
+	if(edita=1){
+		let email = "<%=email%>"
+			let senha = "<%=senha%>"
+			let texto = inputText.value
+			let tag = inputTag.value
+			let cor = inputCor.value
+			let id = inputId.value
+			let id_pessoa = e.target.dataset.id_pessoa
+			let group = "<%=request.getParameter("group")%>"
+			window.location.replace("http://localhost:8080/PrimeiroSpring/usuario");
+
+			data = {
+				'email': email,
+				'senha': senha,
+				'id_pessoa' : id_pessoa,
+				'texto' : texto,
+				'tag' : tag,
+				'cor' : cor,
+				'id_nota' : id,
+				'group' : group
+			}
+			
+			fetch('/PrimeiroSpring/notas', {
+				method: 'PUT',
+				body: JSON.stringify(data)
+			})
+			edita=0
+			
+	}
+	
+	
+	
+}
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
@@ -622,7 +687,7 @@ function filterFunction() {
     		
     			
 	    		if(lista.get(q).get(4).equals(request.getParameter("group"))){
-	    			System.out.println("uai");
+	    			/* System.out.println("uai"); */
 	    			
 	    			%>
 	    			
@@ -631,7 +696,7 @@ function filterFunction() {
 		    		
     	<%
     	}else{
-    		System.out.println("adwd");
+    		
     		if(request.getParameter("group")==null  || request.getParameter("group").equals("null")){
     		%>
     		
