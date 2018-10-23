@@ -21,8 +21,8 @@ public class TarefasController {
 	@RequestMapping(value = "/notas", method = RequestMethod.GET)
 	public void getnotas(HttpServletRequest request,
 			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
-		System.out.println("FOIPROGET");
-		System.out.println("rodou");
+//		System.out.println("FOIPROGET");
+//		System.out.println("rodou");
 			
 	 }
 	@RequestMapping(value = "/notas", method = RequestMethod.PUT)
@@ -52,7 +52,7 @@ public class TarefasController {
 			redirectAttributes.addAttribute("senha", request.getParameter("senha"));
 //			redirectAttributes.addFlashAttribute("email", request.getParameter("email"));
 //			redirectAttributes.addFlashAttribute("senha", request.getParameter("senha"));
-			System.out.println(id_nota);
+//			System.out.println(id_nota);
 			
 			dao.edita_nota(usuario,texto, tag,cor,id_nota);
 
@@ -71,7 +71,7 @@ public class TarefasController {
 	 public String postnotas(HttpServletRequest request,
 			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 		try {
-			System.out.println("rodou");
+//			System.out.println("rodou");
 			DAO dao = new DAO();
 			usuario usuario = new usuario();
 			usuario.setEmail(request.getParameter("email")); 
@@ -126,7 +126,7 @@ public class TarefasController {
 	 public String  deletenotas(@RequestBody String rawJson,HttpServletRequest request,
 			 HttpServletResponse response,RedirectAttributes redirectAttributes) throws IOException {
 		try {
-			System.out.println("rodou");
+//			System.out.println("rodou");
 			DAO dao = new DAO();
 			usuario usuario = new usuario();
 			JSONObject parsedJson = new JSONObject(rawJson);

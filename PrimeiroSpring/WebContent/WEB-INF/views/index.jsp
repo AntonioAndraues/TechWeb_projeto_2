@@ -243,7 +243,7 @@
 					lista = dao.checktasks_all();
 				}
 				String search_str = request.getParameter("search");
-				System.out.println(search_str);
+			/* 	System.out.println(search_str); */
 				//System.out.println(Arrays.asList(lista).contains(search_str));
 				//System.out.println(search_str);	
 			
@@ -280,7 +280,7 @@
 			}else{
 				
 				if(request.getParameter("group")!=null  && !request.getParameter("group").equals("null")){
-					System.out.println("eitcha");
+					/* System.out.println("eitcha"); */
 					if(request.getParameter("search")==null){
 						lista = dao.checktasks_all();
 					}
@@ -513,7 +513,7 @@ for (var k = 0; k < btn_del_Arr.length; k++) {
 				body: JSON.stringify(data)
 			})
 			
-			window.location = "http://localhost:8080/PrimeiroSpring/usuario";
+			window.location.replace("http://localhost:8080/PrimeiroSpring/usuario");
 		}
 		
 
@@ -564,7 +564,7 @@ submit_name.onclick = function(e) {
 			let id = inputId.value
 			let id_pessoa = e.target.dataset.id_pessoa
 			let group = "<%=request.getParameter("group")%>"
-			
+			window.location.replace("http://localhost:8080/PrimeiroSpring/usuario");
 
 			data = {
 				'email': email,
@@ -582,7 +582,7 @@ submit_name.onclick = function(e) {
 				body: JSON.stringify(data)
 			})
 			edita=0
-			window.location = "http://localhost:8080/PrimeiroSpring/usuario";
+			
 	}
 	
 	
@@ -687,7 +687,7 @@ function filterFunction() {
     		
     			
 	    		if(lista.get(q).get(4).equals(request.getParameter("group"))){
-	    			System.out.println("uai");
+	    			/* System.out.println("uai"); */
 	    			
 	    			%>
 	    			
